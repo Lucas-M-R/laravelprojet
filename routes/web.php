@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,46 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/contact', function () {
-    return view('Contact');
-});
-Route::get('/bonjour/{nom}', function () {
-    $nom = request('nom');
-
-    return view('Bonjour', [
-        'nom' => $nom,
-    ]);
-});
-
-Route::get('/inscription', function () {
-    return view('inscription');
-});
-
-
-Route::post('/inscription', function () {
-    request()->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required', 'confirmed', 'min:8'],
-        'password_confirmation' => ['required'],
-    ], [
-        'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire :min caractères.'
-    ]);
-    
-    $utilisateur = App\Models\Utilisateur::create([
-        'email' => request('email'),
-        'mot_de_passe' => bcrypt(request('password')),
-    ]);
-
-});
-
-Route::get('/utilisateurs', function () {
-    $utilisateurs = App\Models\Utilisateur::all();
-
-    return view('utilisateurs', [
-        'utilisateurs' => $utilisateurs
-    ]);
-});
+Route::get('/', [PostController::class, 'index'])->name('welcome');
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::get('/contact', [PostController::class, 'contact'])->name('contact');
