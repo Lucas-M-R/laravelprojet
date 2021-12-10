@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-
+<div class="container d-flex flex-column">
+<img src="https://loremflickr.com/450/350" alt="">
 <h3>{{ $post->title}}</h3>  <br/>  
 <p>{{ $post->content }}</p>
 
@@ -23,8 +24,9 @@
 
 
 
-<button href=" {{$post->id}} ">Editer</button>
-<button href=" {{$post->id}}">Supprimer</button>
+<a href="/posts/edit/{{$post->id}} ">Editer</a>
+<a href="/posts/delete/{{$post->id}}">Supprimer</a>
+</div>
 @endsection
 
    

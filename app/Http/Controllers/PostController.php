@@ -50,7 +50,7 @@ class PostController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'title' => ['required', 'min:5', 'max:255', 'unique:posts', new Uppercase],
+            'title' => ['required', 'min:5', 'max:255', 'unique:posts'],
             'content' => ['required', 'min:5', 'max:5000', 'unique:posts']
         ]);
 
@@ -74,7 +74,7 @@ class PostController extends Controller
     public function suppress($id){
        $post = Post::find($id);
        $post->delete();
-       dd('Supprimé');
+       return $this->index();
     }
        
 
