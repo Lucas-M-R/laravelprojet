@@ -9,7 +9,7 @@ class PostFactory extends Factory
 {
 
        /**Je sais pas si c'est utile
-     * 
+     * Mais dans le doute
      * 
      * 
      * @var string

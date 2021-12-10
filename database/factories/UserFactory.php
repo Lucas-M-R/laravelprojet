@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**Je sais pas si c'est utile
-     * 
+     * Mais dans le doute
      * 
      * 
      * @var string
