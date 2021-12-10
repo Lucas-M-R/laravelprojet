@@ -615,9 +615,7 @@ class ErrorHandler
         }
 
         $loggedErrors = $this->loggedErrors;
-        if ($exception === $handlerException) {
-            $this->loggedErrors &= ~$type;
-        }
+        $this->loggedErrors = $exception === $handlerException ? 0 : $this->loggedErrors;
 
         try {
             $this->handleException($handlerException);
