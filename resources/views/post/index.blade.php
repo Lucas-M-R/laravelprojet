@@ -23,7 +23,7 @@
                                     <div class=" my-3"><a href="#" class="text-2xl font-bold text-gray-700 hover:underline">
                                         {{$post->title}}</a>
                                         <div class="flex">
-                                            <img src="{{ asset('/storage/' . $post->image)}}" alt="" style="max-height:150px;">
+                                            <img src="{{ asset('/storage/' . $post->image)}}" alt="" style="object-fit: cover; width: 300px;">
                                             <p class="ml-5 mt-2 text-gray-600">
                                                 {{Str::limit($post->content), 120}}
                                             </p>

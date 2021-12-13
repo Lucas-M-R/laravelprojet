@@ -22,6 +22,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', [PostController::class, 'index'])
 ->name('posts.index');
 
+// Route::get('/posts/{id}', [PostController::class, 'show'])
+// ->name('posts.show');
+Route::resource('posts', UserController::class);
+
 Route::middleware(['auth'])->group(function (){
 
     Route::resource('posts', PostController::class)
