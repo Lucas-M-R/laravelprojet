@@ -20,6 +20,8 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('image');
+            $table->string('github');
+            $table->string('link');
             $table->timestamps();
 
             $table->foreignIdFor(User::class);

@@ -46,10 +46,11 @@ class PostController extends Controller
 
         $imageName = $request->image->store('posts');
         $post = Post::create([
-                    'title' => $request->title ,
-                    'content' => $request->content ,
+                    'title' => $request->title, 
+                    'content' => $request->content, 
+                    'github' => $request->github,
+                    'link' => $request->link,
                     'image' => $imageName ,
-
         ]);
         return redirect()->route('dashboard')->with('success', 'votre projet a été créé');
     }
@@ -97,6 +98,8 @@ class PostController extends Controller
         $arrayUpdate = [
             'title' => $request->title, 
             'content' => $request->content, 
+            'github' => $request->github,
+            'link' => $request->link,
         ];
 
         if ($request->image != null){

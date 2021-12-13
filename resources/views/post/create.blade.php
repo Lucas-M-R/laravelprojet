@@ -29,6 +29,12 @@
     <x-label for="image" value="Image du projet" />
     <x-input id="image" type="file" name="image" />
 
+    <x-label for="github" value="lien github" />
+    <x-input id="github" name="github" />
+
+    <x-label for="link" value="lien" />
+    <x-input id="link" name="link" />
+
     <x-label for="category" value="Catégorie du projet" />
         <select name="category" id="category">
             @foreach ($categories as $category)

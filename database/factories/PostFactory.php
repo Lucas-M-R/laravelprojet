@@ -29,6 +29,7 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(rand(5, 10), true),
             'content' => $this->faker->sentences(15, true),
+            // 'github' => $this->faker->link(true),
             'image' => 'https://loremflickr.com/250/150'
         ];
     }
