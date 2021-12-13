@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreatePostsTable extends Migration
 {
@@ -17,8 +19,11 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
+            $table->string('image');
             $table->timestamps();
-            
+
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Category::class);
         });
     }
 
@@ -31,4 +36,4 @@ class CreatePostsTable extends Migration
     {
         Schema::dropIfExists('posts');
     }
-} 
+}

@@ -3,84 +3,128 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Rules\Uppercase;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $posts = Post::with('category', 'user')->latest()->get();
 
- 
-
-
-
-
-
-
-    public function index(){
-
-        // $posts = Post::orderby('created_at', 'DESC')->take(10)->get();
-        $posts = Post::all();
-        // dd($posts);
-
-        return view('articles', [
-            'posts' => $posts
-        ]);
-    }
-    public function show($id){
-
-
-        // $post = Post::where('id', '3')->firstOrFail();
-        $post = Post::findOrFail($id);
-        // dd($post);
-
-
-
-        // $post = $posts[$id] ?? 'Pas de titre';
-
-        return view('article', [
-            'post' => $post
-        ]);
+        return view('post.index', compact('posts'));
     }
 
-    public function create(){
-        return view('form');
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $categories = Category::all();
+
+        return view('post.create', compact('categories'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\StorePostRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StorePostRequest $request)
+    {
 
-    public function store(Request $request){
+        $imageName = $request->image->store('posts');
+        $post = Post::create([
+                    'title' => $request->title ,
+                    'content' => $request->content ,
+                    'image' => $imageName ,
 
-        $request->validate([
-            'title' => ['required', 'min:5', 'max:255', 'unique:posts'],
-            'content' => ['required', 'min:5', 'max:5000', 'unique:posts']
         ]);
+        return redirect()->route('dashboard')->with('success', 'votre projet a été créé');
+    }
 
-        Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
-        $id = Post::orderby('created_at', 'DESC')->take(1)->get('id');
-        $this->show($id);
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post)
+    {
+        return view('post.show', compact('post'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Post $post)
+    {
+
+
+        if (! Gate::allows('update-post', $post)) {
+            abort(403);
+        }
+
+
+
+        $categories = Category::all();
+        return view('post.edit', compact('post', 'categories'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdatePostRequest  $request
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function update(StorePostRequest $request, Post $post)
+    {
+        $arrayUpdate = [
+            'title' => $request->title, 
+            'content' => $request->content, 
+        ];
+
+        if ($request->image != null){
+            $imageName = $request->image->store('posts');
+            $arrayUpdate = array_merge($arrayUpdate, [
+                'image' => $imageName
+            ]);
+        }
+
+        $post->update($arrayUpdate);
+        return redirect()->route('dashboard')->with('success', 'votre projet a été modifié');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Post $post)
+    {
+                if (! Gate::allows('destroy-post', $post)) {
+            abort(403);
+        }
         
+        $post->delete();
+
+        return redirect()->route('dashboard')->with('success', 'votre projet a été supprimé');
 
     }
-    public function edit($id, Request $request){
-       $post = Post::find($id);
-       $post->update([
-           'title' => $request->title,
-           'content' => $request->content,
-       ]);
-       return view ('edit');
-    }
-    public function suppress($id){
-       $post = Post::find($id);
-       $post->delete();
-       return $this->index();
-    }
-       
-
-    public function contact(){
-        return view ('contact');
-    }
-
-
 }
